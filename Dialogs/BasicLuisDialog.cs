@@ -39,173 +39,173 @@ namespace Microsoft.Bot.Sample.LuisBot
             context.Wait(MessageReceived);
         }
 
-        [LuisIntent("Class")]
-        public async Task ClassIntent(IDialogContext context, LuisResult result)
-        {
-            await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
-            //context.Wait(MessageReceived);
-            var activity = context.Activity as Activity;
-            if (activity.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-                var isTyping = activity.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //[LuisIntent("Class")]
+        //public async Task ClassIntent(IDialogContext context, LuisResult result)
+        //{
+        //    await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
+        //    //context.Wait(MessageReceived);
+        //    var activity = context.Activity as Activity;
+        //    if (activity.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+        //        var isTyping = activity.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
 
-            //Thread.Sleep(2500);
+        //    //Thread.Sleep(2500);
 
-            PromptDialog.Text(
-               context: context,
-               resume: CustomerNameFromGreeting,
-               prompt: "May i know your Name please?",
-               retry: "Sorry, I don't understand that.");
-        }
-        public async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
-        {
-            //string response = await result;
-            //customerName = response;
+        //    PromptDialog.Text(
+        //       context: context,
+        //       resume: CustomerNameFromGreeting,
+        //       prompt: "May i know your Name please?",
+        //       retry: "Sorry, I don't understand that.");
+        //}
+        //public async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    //string response = await result;
+        //    //customerName = response;
 
-            PromptDialog.Text(
-            context: context,
-            resume: CustomerMobileNumberHandler,
-            prompt: "What is the best number to contact you?",
-            retry: "Sorry, I don't understand that.");
-        }
-        public async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
-        {
-            //string response = await result;
-            //custMobileNumber = response;
+        //    PromptDialog.Text(
+        //    context: context,
+        //    resume: CustomerMobileNumberHandler,
+        //    prompt: "What is the best number to contact you?",
+        //    retry: "Sorry, I don't understand that.");
+        //}
+        //public async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    //string response = await result;
+        //    //custMobileNumber = response;
 
-            PromptDialog.Text(
-            context: context,
-            resume: CustomerEmailHandler,
-            prompt: "What is your email id?",
-            retry: "Sorry, I don't understand that.");
-        }
-        public async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
-        {
-            //string response = await result;
-            //custEmailID = response;
+        //    PromptDialog.Text(
+        //    context: context,
+        //    resume: CustomerEmailHandler,
+        //    prompt: "What is your email id?",
+        //    retry: "Sorry, I don't understand that.");
+        //}
+        //public async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    //string response = await result;
+        //    //custEmailID = response;
 
-            await context.PostAsync("Many Thanks.We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
-            //context.Wait(MessageReceived);
-            var activity1 = context.Activity as Activity;
-            if (activity1.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity1.ServiceUrl));
-                var isTyping = activity1.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    await context.PostAsync("Many Thanks.We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
+        //    //context.Wait(MessageReceived);
+        //    var activity1 = context.Activity as Activity;
+        //    if (activity1.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity1.ServiceUrl));
+        //        var isTyping = activity1.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
 
-            var reply = context.MakeMessage();
+        //    var reply = context.MakeMessage();
 
-            reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            reply.Attachments = GetCardsAttachments();
+        //    reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+        //    reply.Attachments = GetCardsAttachments();
 
-            await context.PostAsync(reply);
+        //    await context.PostAsync(reply);
 
-            var activity = context.Activity as Activity;
-            if (activity.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-                var isTyping = activity.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    var activity = context.Activity as Activity;
+        //    if (activity.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+        //        var isTyping = activity.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
 
-            PromptDialog.Text(
-           context: context,
-           resume: CustomerPreferenceHandler,
-           prompt: "What's your preference?",
-           retry: "Sorry, I don't understand that.");
+        //    PromptDialog.Text(
+        //   context: context,
+        //   resume: CustomerPreferenceHandler,
+        //   prompt: "What's your preference?",
+        //   retry: "Sorry, I don't understand that.");
 
-            //await context.PostAsync("");
-            //var activity2 = context.Activity as Activity;
-            //if (activity2.Type == ActivityTypes.Message)
-            //{
-            //    var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
-            //    var isTyping = activity2.CreateReply("Nerdibot is thinking...");
-            //    isTyping.Type = ActivityTypes.Typing;
-            //    await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    //await context.PostAsync("");
+        //    //var activity2 = context.Activity as Activity;
+        //    //if (activity2.Type == ActivityTypes.Message)
+        //    //{
+        //    //    var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
+        //    //    var isTyping = activity2.CreateReply("Nerdibot is thinking...");
+        //    //    isTyping.Type = ActivityTypes.Typing;
+        //    //    await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-            //    // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-            //    Thread.Sleep(2500);
-            //}
+        //    //    // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //    //    Thread.Sleep(2500);
+        //    //}
            
-           // context.Wait(MessageReceived);
+        //   // context.Wait(MessageReceived);
 
 
-        }
-        public async Task CustomerPreferenceHandler(IDialogContext context, IAwaitable<string> result)
-        {
-            await context.PostAsync("Sure, that’s an amazing choice.");
+        //}
+        //public async Task CustomerPreferenceHandler(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    await context.PostAsync("Sure, that’s an amazing choice.");
 
-            var activity = context.Activity as Activity;
-            if (activity.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-                var isTyping = activity.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    var activity = context.Activity as Activity;
+        //    if (activity.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+        //        var isTyping = activity.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
-            await context.PostAsync($@"{Environment.NewLine}The below are the specifications:
-                                    {Environment.NewLine}Color : Alabaster Silver Metallic, Bold Beige Metallic, Crystal Black Pearl, Deep Sapphire Blue, Habanero Red, Polished Metal Metallic, Tafeta White.
-                                    {Environment.NewLine}No of Doors: 4,
-                                    {Environment.NewLine}Function: Automatic,
-                                    {Environment.NewLine}Displacement: 1497,
-                                    {Environment.NewLine}Cylinders: 6");
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
+        //    await context.PostAsync($@"{Environment.NewLine}The below are the specifications:
+        //                            {Environment.NewLine}Color : Alabaster Silver Metallic, Bold Beige Metallic, Crystal Black Pearl, Deep Sapphire Blue, Habanero Red, Polished Metal Metallic, Tafeta White.
+        //                            {Environment.NewLine}No of Doors: 4,
+        //                            {Environment.NewLine}Function: Automatic,
+        //                            {Environment.NewLine}Displacement: 1497,
+        //                            {Environment.NewLine}Cylinders: 6");
 
-            var activity2 = context.Activity as Activity;
-            if (activity2.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
-                var isTyping = activity2.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    var activity2 = context.Activity as Activity;
+        //    if (activity2.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
+        //        var isTyping = activity2.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
 
-            PromptDialog.Confirm(
-            context: context,
-            resume: InteriorProcess,
-            prompt: "Would you also like to see the interiors?",
-            retry: "Sorry, I don't understand that.");
-        }
-        public async Task InteriorProcess(IDialogContext context, IAwaitable<bool> argument)
-        {
-            var answer = await argument;
-            if (answer)
-            {
-                var reply = context.MakeMessage();
+        //    PromptDialog.Confirm(
+        //    context: context,
+        //    resume: InteriorProcess,
+        //    prompt: "Would you also like to see the interiors?",
+        //    retry: "Sorry, I don't understand that.");
+        //}
+        //public async Task InteriorProcess(IDialogContext context, IAwaitable<bool> argument)
+        //{
+        //    var answer = await argument;
+        //    if (answer)
+        //    {
+        //        var reply = context.MakeMessage();
 
-                reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-                reply.Attachments = GetInteriorAttachments();
+        //        reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+        //        reply.Attachments = GetInteriorAttachments();
 
-                await context.PostAsync(reply);
+        //        await context.PostAsync(reply);
 
-                context.Wait(MessageReceived);
-            }
-            else
-            {
+        //        context.Wait(MessageReceived);
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
         //[LuisIntent("Decision")]
         //public async Task DecisionIntent(IDialogContext context, LuisResult result)
         //{
