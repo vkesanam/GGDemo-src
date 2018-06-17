@@ -23,9 +23,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
         {
         }
-        string customerName;
-        string custMobileNumber;
-        string custEmailID;
+      
         [LuisIntent("None")]
         public async Task NoneIntent(IDialogContext context, LuisResult result)
         {
@@ -93,7 +91,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             //string response = await result;
             //custEmailID = response;
 
-            await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
+            await context.PostAsync("Many Thanks.We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
             //context.Wait(MessageReceived);
             var activity1 = context.Activity as Activity;
             if (activity1.Type == ActivityTypes.Message)
