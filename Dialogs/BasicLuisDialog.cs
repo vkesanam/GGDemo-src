@@ -1,10 +1,12 @@
 using System;
 using System.Configuration;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -33,7 +35,31 @@ namespace Microsoft.Bot.Sample.LuisBot
             await context.PostAsync("Hello, Welcome to Gargash Enterprises, I am here to help make a better decision. How can I help you today?");
             context.Wait(MessageReceived);
         }
+        [LuisIntent("Class")]
+        public async Task ClassIntent(IDialogContext context, LuisResult result)
+        {
+            await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
+            //context.Wait(MessageReceived);
+            var activity = context.Activity as Activity;
+            if (activity.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+                var isTyping = activity.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
 
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
+
+            //Thread.Sleep(2500);
+
+            //PromptDialog.Text(
+            //   context: context,
+            //   resume: CustomerNameFromGreeting,
+            //   prompt: "May i know your Name please?",
+            //   retry: "Sorry, I don't understand that.");
+        }
         [LuisIntent("Cancel")]
         public async Task CancelIntent(IDialogContext context, LuisResult result)
         {
