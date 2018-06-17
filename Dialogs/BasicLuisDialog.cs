@@ -1,10 +1,12 @@
 using System;
 using System.Configuration;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
+using Microsoft.Bot.Connector;
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -18,7 +20,9 @@ namespace Microsoft.Bot.Sample.LuisBot
             domain: ConfigurationManager.AppSettings["LuisAPIHostName"])))
         {
         }
-
+        string customerName;
+        string custMobileNumber;
+        string custEmailID;
         [LuisIntent("None")]
         public async Task NoneIntent(IDialogContext context, LuisResult result)
         {
@@ -37,67 +41,67 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Class")]
         public async Task ClassIntent(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync("sss");
-            context.Wait(MessageReceived);
-            //var activity = context.Activity as Activity;
-            //if (activity.Type == ActivityTypes.Message)
-            //{
-            //    var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-            //    var isTyping = activity.CreateReply("Nerdibot is thinking...");
-            //    isTyping.Type = ActivityTypes.Typing;
-            //    await connector.Conversations.ReplyToActivityAsync(isTyping);
+            await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
+            //context.Wait(MessageReceived);
+            var activity = context.Activity as Activity;
+            if (activity.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+                var isTyping = activity.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-            //    // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-            //    Thread.Sleep(2500);
-            //}
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
 
             //Thread.Sleep(2500);
 
-            //PromptDialog.Text(
-            //   context: context,
-            //   resume: CustomerNameFromGreeting,
-            //   prompt: "May i know your Name please?",
-            //   retry: "Sorry, I don't understand that.");
+            PromptDialog.Text(
+               context: context,
+               resume: CustomerNameFromGreeting,
+               prompt: "May i know your Name please?",
+               retry: "Sorry, I don't understand that.");
         }
-        //public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
-        //{
-        //    string response = await result;
-        //    customerName = response;
+        public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
+        {
+            string response = await result;
+            customerName = response;
 
-        //    PromptDialog.Text(
-        //    context: context,
-        //    resume: CustomerMobileNumberHandler,
-        //    prompt: "What is the best number to contact you?",
-        //    retry: "Sorry, I don't understand that.");
-        //}
-        //public virtual async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
-        //{
-        //    string response = await result;
-        //    custMobileNumber = response;
+            PromptDialog.Text(
+            context: context,
+            resume: CustomerMobileNumberHandler,
+            prompt: "What is the best number to contact you?",
+            retry: "Sorry, I don't understand that.");
+        }
+        public virtual async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
+        {
+            string response = await result;
+            custMobileNumber = response;
 
-        //    PromptDialog.Text(
-        //    context: context,
-        //    resume: CustomerEmailHandler,
-        //    prompt: "What is your email id?",
-        //    retry: "Sorry, I don't understand that.");
-        //}
-        //public virtual async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
-        //{
-        //    string response = await result;
-        //    custEmailID = response;
+            PromptDialog.Text(
+            context: context,
+            resume: CustomerEmailHandler,
+            prompt: "What is your email id?",
+            retry: "Sorry, I don't understand that.");
+        }
+        public virtual async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
+        {
+            string response = await result;
+            custEmailID = response;
 
-        //    await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet. What's your preference?");
+            await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet. What's your preference?");
+            context.Wait(MessageReceived);
 
+            //var reply = context.MakeMessage();
 
-        //    //var reply = context.MakeMessage();
+            //reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            //reply.Attachments = GetCardsAttachments();
 
-        //    //reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-        //    //reply.Attachments = GetCardsAttachments();
+            //await context.PostAsync(reply);
 
-        //    //await context.PostAsync(reply);
-
-        //    //context.Wait(MessageReceived);
-        //}
+            //context.Wait(MessageReceived);
+        }
         [LuisIntent("Cancel")]
         public async Task CancelIntent(IDialogContext context, LuisResult result)
         {
