@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
 using System.Threading.Tasks;
@@ -90,17 +91,70 @@ namespace Microsoft.Bot.Sample.LuisBot
             string response = await result;
             custEmailID = response;
 
-            await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet. What's your preference?");
+            await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
+            //context.Wait(MessageReceived);
+
+            var reply = context.MakeMessage();
+
+            reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+            reply.Attachments = GetCardsAttachments();
+
+            await context.PostAsync(reply);
+
+            var activity = context.Activity as Activity;
+            if (activity.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+                var isTyping = activity.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
+
+            await context.PostAsync("What's your preference?");
             context.Wait(MessageReceived);
 
-            //var reply = context.MakeMessage();
 
-            //reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            //reply.Attachments = GetCardsAttachments();
+        }
+        private static IList<Attachment> GetCardsAttachments()
+        {
+            return new List<Attachment>()
+            {
+                GetHeroCard(
+                    "Sedan",
+                    "",
+                    "While most compact sedans look a bit off with their deliberately-shortened side profiles, the Ford has managed to give the Figo Aspire a clean look. Being a Ford, the Figo Aspire offers a fun driving experience, especially the diesel variant.",
+                    new CardImage(url: "https://www.drivespark.com/car-image/540x400x80/car/37642259-honda_city.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "Read more", value: "http://www.gargash.ae/")),
+                GetHeroCard(
+                     "Coupe",
+                     "",
+                    "Ferrari has officially launched their brand new V12 powered GT in India - the 812 Superfast. The Ferrari 812 Superfast replaces the F12 Berlinetta, a model that was quite popular with Ferrari customers in the country.",
+                    new CardImage(url: "https://auto.ndtvimg.com/car-images/medium/aston-martin/db11/aston-martin-db11.jpg?v=7"),
+                    new CardAction(ActionTypes.OpenUrl, "Read more", value: "http://www.gargash.ae/")),
+                GetHeroCard(
+                     "Cabriolet",
+                     "",
+                    "Ferrari has officially launched their brand new V12 powered GT in India - the 812 Superfast. The Ferrari 812 Superfast replaces the F12 Berlinetta, a model that was quite popular with Ferrari customers in the country.",
+                    new CardImage(url: "http://cdn1.carbuyer.co.uk/sites/carbuyer_d7/files/car_images/mercedes-c-class-conv_0.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "Read more", value: "http://www.gargash.ae/")),
 
-            //await context.PostAsync(reply);
+            };
+        }
+        private static Attachment GetHeroCard(string title, string subtitle, string text, CardImage cardImage, CardAction cardAction)
+        {
+            var heroCard = new HeroCard
+            {
+                Title = title,
+                Subtitle = subtitle,
+                Text = text,
+                Images = new List<CardImage>() { cardImage },
+                Buttons = new List<CardAction>() { cardAction },
+            };
 
-            //context.Wait(MessageReceived);
+            return heroCard.ToAttachment();
         }
         [LuisIntent("Cancel")]
         public async Task CancelIntent(IDialogContext context, LuisResult result)
