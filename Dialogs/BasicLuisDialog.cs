@@ -37,7 +37,7 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Class")]
         public async Task ClassIntent(IDialogContext context, LuisResult result)
         {
-            await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
+            await context.PostAsync("sss");
             context.Wait(MessageReceived);
             //var activity = context.Activity as Activity;
             //if (activity.Type == ActivityTypes.Message)
@@ -59,45 +59,45 @@ namespace Microsoft.Bot.Sample.LuisBot
             //   prompt: "May i know your Name please?",
             //   retry: "Sorry, I don't understand that.");
         }
-        public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
-        {
-            string response = await result;
-            customerName = response;
+        //public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    string response = await result;
+        //    customerName = response;
 
-            PromptDialog.Text(
-            context: context,
-            resume: CustomerMobileNumberHandler,
-            prompt: "What is the best number to contact you?",
-            retry: "Sorry, I don't understand that.");
-        }
-        public virtual async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
-        {
-            string response = await result;
-            custMobileNumber = response;
+        //    PromptDialog.Text(
+        //    context: context,
+        //    resume: CustomerMobileNumberHandler,
+        //    prompt: "What is the best number to contact you?",
+        //    retry: "Sorry, I don't understand that.");
+        //}
+        //public virtual async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    string response = await result;
+        //    custMobileNumber = response;
 
-            PromptDialog.Text(
-            context: context,
-            resume: CustomerEmailHandler,
-            prompt: "What is your email id?",
-            retry: "Sorry, I don't understand that.");
-        }
-        public virtual async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
-        {
-            string response = await result;
-            custEmailID = response;
+        //    PromptDialog.Text(
+        //    context: context,
+        //    resume: CustomerEmailHandler,
+        //    prompt: "What is your email id?",
+        //    retry: "Sorry, I don't understand that.");
+        //}
+        //public virtual async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    string response = await result;
+        //    custEmailID = response;
 
-            await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet. What's your preference?");
+        //    await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet. What's your preference?");
 
 
-            //var reply = context.MakeMessage();
+        //    //var reply = context.MakeMessage();
 
-            //reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
-            //reply.Attachments = GetCardsAttachments();
+        //    //reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+        //    //reply.Attachments = GetCardsAttachments();
 
-            //await context.PostAsync(reply);
+        //    //await context.PostAsync(reply);
 
-            //context.Wait(MessageReceived);
-        }
+        //    //context.Wait(MessageReceived);
+        //}
         [LuisIntent("Cancel")]
         public async Task CancelIntent(IDialogContext context, LuisResult result)
         {
