@@ -64,7 +64,7 @@ namespace Microsoft.Bot.Sample.LuisBot
                prompt: "May i know your Name please?",
                retry: "Sorry, I don't understand that.");
         }
-        public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
+        public async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
         {
             string response = await result;
             customerName = response;
@@ -75,7 +75,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             prompt: "What is the best number to contact you?",
             retry: "Sorry, I don't understand that.");
         }
-        public virtual async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
+        public async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
         {
             string response = await result;
             custMobileNumber = response;
@@ -86,7 +86,7 @@ namespace Microsoft.Bot.Sample.LuisBot
             prompt: "What is your email id?",
             retry: "Sorry, I don't understand that.");
         }
-        public virtual async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
+        public async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
         {
             string response = await result;
             custEmailID = response;
