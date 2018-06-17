@@ -209,85 +209,85 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             }
         }
-        [LuisIntent("Decision")]
-        public async Task DecisionIntent(IDialogContext context, LuisResult result)
-        {
+        //[LuisIntent("Decision")]
+        //public async Task DecisionIntent(IDialogContext context, LuisResult result)
+        //{
 
-            await context.PostAsync("Good to hear that.How about a test drive of the machine? Trust me, that’s going to be an amazing experience.");
-            var activity = context.Activity as Activity;
-            if (activity.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-                var isTyping = activity.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
+        //    await context.PostAsync("Good to hear that.How about a test drive of the machine? Trust me, that’s going to be an amazing experience.");
+        //    var activity = context.Activity as Activity;
+        //    if (activity.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+        //        var isTyping = activity.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
 
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
 
-            PromptDialog.Choice(context, ResumePropertyOptions,
-                    new List<string>()
-                    {
-                        "Yes",
-                        "No"
-                    },
-                    "Shall i book an appointment for you?");
-            //context.Wait(MessageReceived);
-
-
-        }
-        public async Task ResumePropertyOptions(IDialogContext context, IAwaitable<string> argument)
-        {
-            var selection = await argument;
-            string result = selection;
-            if (result == "Yes")
-            {
-                PromptDialog.Text(
-              context: context,
-              resume: CustomerLead,
-              prompt: "Let me know your preferred date and time.",
-              retry: "Sorry, I don't understand that.");
-            }
-            else
-            {
-
-           //     PromptDialog.Confirm(
-           //context: context,
-           //resume: RemainderProcess,
-           //prompt: "Would you like to me remind you after a week?",
-           //retry: "Sorry, I don't understand that.");
-            }
-        }
-        public async Task CustomerLead(IDialogContext context, IAwaitable<string> result)
-        {
-            string response = await result;
-            string dateandtime = response;
-
-            await context.PostAsync("Thank you for your interest. Our property consultant will get back to you shortly.");
-            //Create Appointment
-            var activity = context.Activity as Activity;
-            if (activity.Type == ActivityTypes.Message)
-            {
-                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
-                var isTyping = activity.CreateReply("Nerdibot is thinking...");
-                isTyping.Type = ActivityTypes.Typing;
-                await connector.Conversations.ReplyToActivityAsync(isTyping);
-
-                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
-                Thread.Sleep(2500);
-            }
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
-
-            CrmServiceClient crmConn = new CrmServiceClient("admin@gargashgroup.onmicrosoft.com", CrmServiceClient.MakeSecureString("Welcome@123"), "EMEA", "org60746d27", useUniqueInstance: false, useSsl: true, isOffice365: true);
-            IOrganizationService service = crmConn.OrganizationServiceProxy;
-
-            Microsoft.Xrm.Sdk.Entity Appointment = new Microsoft.Xrm.Sdk.Entity("appointment");
-            Appointment["subject"] = "Appointment";
-            Guid AppointmentId = service.Create(Appointment);
+        //    PromptDialog.Choice(context, ResumePropertyOptions,
+        //            new List<string>()
+        //            {
+        //                "Yes",
+        //                "No"
+        //            },
+        //            "Shall i book an appointment for you?");
+        //    //context.Wait(MessageReceived);
 
 
-        }
+        //}
+        //public async Task ResumePropertyOptions(IDialogContext context, IAwaitable<string> argument)
+        //{
+        //    var selection = await argument;
+        //    string result = selection;
+        //    if (result == "Yes")
+        //    {
+        //        PromptDialog.Text(
+        //      context: context,
+        //      resume: CustomerLead,
+        //      prompt: "Let me know your preferred date and time.",
+        //      retry: "Sorry, I don't understand that.");
+        //    }
+        //    else
+        //    {
+
+        //   //     PromptDialog.Confirm(
+        //   //context: context,
+        //   //resume: RemainderProcess,
+        //   //prompt: "Would you like to me remind you after a week?",
+        //   //retry: "Sorry, I don't understand that.");
+        //    }
+        //}
+        //public async Task CustomerLead(IDialogContext context, IAwaitable<string> result)
+        //{
+        //    string response = await result;
+        //    string dateandtime = response;
+
+        //    await context.PostAsync("Thank you for your interest. Our property consultant will get back to you shortly.");
+        //    //Create Appointment
+        //    var activity = context.Activity as Activity;
+        //    if (activity.Type == ActivityTypes.Message)
+        //    {
+        //        var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+        //        var isTyping = activity.CreateReply("Nerdibot is thinking...");
+        //        isTyping.Type = ActivityTypes.Typing;
+        //        await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+        //        // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+        //        Thread.Sleep(2500);
+        //    }
+        //    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
+
+        //    CrmServiceClient crmConn = new CrmServiceClient("admin@gargashgroup.onmicrosoft.com", CrmServiceClient.MakeSecureString("Welcome@123"), "EMEA", "org60746d27", useUniqueInstance: false, useSsl: true, isOffice365: true);
+        //    IOrganizationService service = crmConn.OrganizationServiceProxy;
+
+        //    Microsoft.Xrm.Sdk.Entity Appointment = new Microsoft.Xrm.Sdk.Entity("appointment");
+        //    Appointment["subject"] = "Appointment";
+        //    Guid AppointmentId = service.Create(Appointment);
+
+
+        //}
         private static IList<Attachment> GetInteriorAttachments()
         {
             return new List<Attachment>()
