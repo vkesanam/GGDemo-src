@@ -9,8 +9,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Microsoft.Bot.Connector;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Tooling.Connector;
+
 
 namespace Microsoft.Bot.Sample.LuisBot
 {
@@ -202,7 +201,7 @@ namespace Microsoft.Bot.Sample.LuisBot
 
                 await context.PostAsync(reply);
 
-                //context.Wait(MessageReceived);
+                context.Wait(MessageReceived);
             }
             else
             {
