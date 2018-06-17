@@ -66,8 +66,8 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
         {
-            string response = await result;
-            customerName = response;
+            //string response = await result;
+            //customerName = response;
 
             PromptDialog.Text(
             context: context,
@@ -77,8 +77,8 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task CustomerMobileNumberHandler(IDialogContext context, IAwaitable<string> result)
         {
-            string response = await result;
-            custMobileNumber = response;
+            //string response = await result;
+            //custMobileNumber = response;
 
             PromptDialog.Text(
             context: context,
@@ -88,11 +88,22 @@ namespace Microsoft.Bot.Sample.LuisBot
         }
         public async Task CustomerEmailHandler(IDialogContext context, IAwaitable<string> result)
         {
-            string response = await result;
-            custEmailID = response;
+            //string response = await result;
+            //custEmailID = response;
 
             await context.PostAsync("Many Thanks " + customerName + ".We have 3 models in C Class, Sedan, Coupe’ and Cabriolet.");
             //context.Wait(MessageReceived);
+            var activity1 = context.Activity as Activity;
+            if (activity1.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity1.ServiceUrl));
+                var isTyping = activity1.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
 
             var reply = context.MakeMessage();
 
