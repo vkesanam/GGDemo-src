@@ -124,10 +124,112 @@ namespace Microsoft.Bot.Sample.LuisBot
                 Thread.Sleep(2500);
             }
 
-            await context.PostAsync("What's your preference?");
-            context.Wait(MessageReceived);
+            PromptDialog.Text(
+           context: context,
+           resume: CustomerPreferenceHandler,
+           prompt: "What's your preference?",
+           retry: "Sorry, I don't understand that.");
+
+            //await context.PostAsync("");
+            //var activity2 = context.Activity as Activity;
+            //if (activity2.Type == ActivityTypes.Message)
+            //{
+            //    var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
+            //    var isTyping = activity2.CreateReply("Nerdibot is thinking...");
+            //    isTyping.Type = ActivityTypes.Typing;
+            //    await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+            //    // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+            //    Thread.Sleep(2500);
+            //}
+           
+           // context.Wait(MessageReceived);
 
 
+        }
+        public async Task CustomerPreferenceHandler(IDialogContext context, IAwaitable<string> result)
+        {
+            await context.PostAsync("Sure, that’s an amazing choice.");
+
+            var activity = context.Activity as Activity;
+            if (activity.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity.ServiceUrl));
+                var isTyping = activity.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
+            await context.PostAsync($@"{Environment.NewLine}The below are the specifications:
+                                    {Environment.NewLine}Color : Alabaster Silver Metallic, Bold Beige Metallic, Crystal Black Pearl, Deep Sapphire Blue, Habanero Red, Polished Metal Metallic, Tafeta White.
+                                    {Environment.NewLine}No of Doors: 4,
+                                    {Environment.NewLine}Function: Automatic,
+                                    {Environment.NewLine}Displacement: 1497,
+                                    {Environment.NewLine}Cylinders: 6");
+
+            var activity2 = context.Activity as Activity;
+            if (activity2.Type == ActivityTypes.Message)
+            {
+                var connector = new ConnectorClient(new System.Uri(activity2.ServiceUrl));
+                var isTyping = activity2.CreateReply("Nerdibot is thinking...");
+                isTyping.Type = ActivityTypes.Typing;
+                await connector.Conversations.ReplyToActivityAsync(isTyping);
+
+                // DEMO: I've added this for demonstration purposes, so we have time to see the "Is Typing" integration in the UI. Else the bot is too quick for us :)
+                Thread.Sleep(2500);
+            }
+
+            PromptDialog.Confirm(
+            context: context,
+            resume: InteriorProcess,
+            prompt: "Would you also like to see the interiors?",
+            retry: "Sorry, I don't understand that.");
+        }
+        public async Task InteriorProcess(IDialogContext context, IAwaitable<bool> argument)
+        {
+            var answer = await argument;
+            if (answer)
+            {
+                var reply = context.MakeMessage();
+
+                reply.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+                reply.Attachments = GetInteriorAttachments();
+
+                await context.PostAsync(reply);
+
+                //context.Wait(MessageReceived);
+            }
+            else
+            {
+
+            }
+        }
+        private static IList<Attachment> GetInteriorAttachments()
+        {
+            return new List<Attachment>()
+            {
+                GetHeroCard(
+                    "",
+                    "",
+                    "",
+                    new CardImage(url: "https://cdn.pixabay.com/photo/2017/06/06/20/56/car-2378419_960_720.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "", value: "")),
+                GetHeroCard(
+                     "",
+                     "",
+                    "",
+                    new CardImage(url: "http://www.autoguide.com/blog/wp-content/uploads/2017/10/2017-Mazda-CX-5-5.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "", value: "")),
+                GetHeroCard(
+                     "",
+                     "",
+                    "",
+                    new CardImage(url: "https://mrkustom.com/wp-content/uploads/2012/11/Custom-Car-Seats-Mr-Kustom-Chicago.jpg"),
+                    new CardAction(ActionTypes.OpenUrl, "", value: "")),
+
+            };
         }
         private static IList<Attachment> GetCardsAttachments()
         {
