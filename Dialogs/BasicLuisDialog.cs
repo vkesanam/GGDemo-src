@@ -33,11 +33,12 @@ namespace Microsoft.Bot.Sample.LuisBot
             await context.PostAsync("Hello, Welcome to Gargash Enterprises, I am here to help make a better decision. How can I help you today?");
             context.Wait(MessageReceived);
         }
+
         [LuisIntent("Class")]
         public async Task ClassIntent(IDialogContext context, LuisResult result)
         {
             await context.PostAsync("That’s an amazing choice, to assist you better, I need some more information like name, contact number and email id.I am requesting this information, just in case if I will have to seek my Sales support at office. Hope you don’t mind?");
-            //context.Wait(MessageReceived);
+            context.Wait(MessageReceived);
             //var activity = context.Activity as Activity;
             //if (activity.Type == ActivityTypes.Message)
             //{
@@ -52,11 +53,11 @@ namespace Microsoft.Bot.Sample.LuisBot
 
             //Thread.Sleep(2500);
 
-            PromptDialog.Text(
-               context: context,
-               resume: CustomerNameFromGreeting,
-               prompt: "May i know your Name please?",
-               retry: "Sorry, I don't understand that.");
+            //PromptDialog.Text(
+            //   context: context,
+            //   resume: CustomerNameFromGreeting,
+            //   prompt: "May i know your Name please?",
+            //   retry: "Sorry, I don't understand that.");
         }
         public virtual async Task CustomerNameFromGreeting(IDialogContext context, IAwaitable<string> result)
         {
