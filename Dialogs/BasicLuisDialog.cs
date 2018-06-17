@@ -30,7 +30,8 @@ namespace Microsoft.Bot.Sample.LuisBot
         [LuisIntent("Greeting")]
         public async Task GreetingIntent(IDialogContext context, LuisResult result)
         {
-            await this.ShowLuisResult(context, result);
+            await context.PostAsync("Hello, Welcome to Gargash Enterprises, I am here to help make a better decision. How can I help you today?");
+            context.Wait(MessageReceived);
         }
 
         [LuisIntent("Cancel")]
